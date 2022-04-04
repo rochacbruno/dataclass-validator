@@ -137,10 +137,26 @@ if __name__ == "__main__":
             if self.age < 18:
                 raise ValidationError("Age must be >= 18")
 
-    q = Person(name="Bruno", age=15)
+    try:
+        q = Person(name="Bruno", age=15)
+    except ValidationError as e:
+        print(e)
 
-    print(q.name)
-    print(q.age)
-    print(q)
-    print(type(q))
-    print(q.__dict__)
+    @validatedclass(name=lambda self: self.name != "Bruno")
+    @validatedclass
+    class Person3:
+        name: str
+        age: int
+
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+        def _validate_age(self):
+            if self.age < 18:
+                raise ValidationError("Age must be >= 18")
+
+    try:
+        r = Person3(name="Bruno", age=15)
+    except ValidationError as e:
+        print(e)

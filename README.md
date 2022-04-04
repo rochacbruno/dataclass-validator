@@ -38,7 +38,10 @@ ValidationError: {'name': ValidationError('name did not pass validation.'), 'age
 
 ## Computed fields
 
-```
+```python
+from dataclass_validator import validatedclass
+from dataclasses import dataclass
+
 @computedclass(name=lambda self: self.name.upper())
 @dataclass
 class Person2:
